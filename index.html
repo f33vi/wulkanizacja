@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prezentacja wizytówki - Serwis Opon Siwierski</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(-45deg, #0064b0, #003366, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            color: white;
+            padding: 20px;
+        }
+        
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeIn 1s ease-in;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .card-container {
+            position: relative;
+            width: 1125px;
+            height: 675px;
+            perspective: 2000px;
+            margin: 20px 0;
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px) rotateY(0deg); }
+            50% { transform: translateY(-20px) rotateY(5deg); }
+            100% { transform: translateY(0px) rotateY(0deg); }
+        }
+        
+        .card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 1s ease;
+            cursor: pointer;
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+        
+        .card-side {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        
+        .card-front {
+            transform: rotateY(0deg);
+            background: #0064b0;
+        }
+        
+        .card-back {
+            transform: rotateY(180deg);
+            background: #f5f5f5;
+        }
+        
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+        
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            pointer-events: none;
+            animation: particleFall linear infinite;
+        }
+        
+        @keyframes particleFall {
+            0% {
+                transform: translateY(-10px) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+        
+        .card-instructions {
+            text-align: center;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 18px;
+            animation: pulse 2s infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+        
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            animation: slideUp 1s ease-out;
+            max-width: 600px;
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .footer h2 {
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+        
+        .footer p {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        
+        .footer .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffb700;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Styling front side card content */
+        .front-content {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            background: #0064b0;
+        }
+        
+        .yellow-element {
+            position: absolute;
+            width: 120px;
+            height: 100%;
+            right: 30%;
+            top: 0;
+            background-color: #ffb700;
+        }
+        
+        .white-bar {
+            position: absolute;
+            width: 100%;
+            height: 100px;
+            bottom: 0;
+            background-color: white;
+        }
+        
+        .main-text {
+            position: absolute;
+            top: 30%;
+            left: 5%;
+            color: white;
+            font-weight: 900;
+            font-size: 70px;
+            font-family: 'Arial Black', Arial, sans-serif;
+            line-height: 1.1;
+            text-shadow: 3px 3px 5px rgba(0,0,0,0.2);
+        }
+        
+        .quality-text {
+            position: absolute;
+            top: 40%;
+            left: 70%;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+            text-align: center;
+            transform: translateX(-50%);
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+        
+        .name-text {
+            position: absolute;
+            bottom: 30px;
+            left: 5%;
+            color: #0064b0;
+            font-weight: bold;
+        }
+        
+        .name-text .big {
+            font-size: 40px;
+            line-height: 1;
+        }
+        
+        .name-text .small {
+            font-size: 30px;
+        }
+        
+        .phone-text {
+            position: absolute;
+            bottom: 30px;
+            right: 5%;
+            color: #0064b0;
+            font-weight: bold;
+            font-size: 24px;
+            text-align: right;
+        }
+        
+        .tire-image {
+            position: absolute;
+            right: 10%;
+            top: 40%;
+            transform: translateY(-50%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, #303030, #000000);
+            border-radius: 50%;
+            border: 20px solid #4a4a4a;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
+        }
+        
+        .tire-image::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            height: 60%;
+            background: #5a5a5a;
+            border-radius: 50%;
+        }
+        
+        .tire-image::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30%;
+            height: 30%;
+            background: #252525;
+            border-radius: 50%;
+        }
+        
+        /* Styling back side card content */
+        .back-content {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            background-color: #f5f5f5;
+        }
+        
+        .blue-top-bar {
+            position: absolute;
+            width: 100%;
+            height: 80px;
+            top: 0;
+            background-color: #0064b0;
+        }
+        
+        .blue-bottom-bar {
+            position: absolute;
+            width: 100%;
+            height: 60px;
+            bottom: 0;
+            background-color: #0064b0;
+        }
+        
+        .services-title {
+            position: absolute;
+            top: 25px;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            font-size: 30px;
+        }
+        
+        .services-list {
+            position: absolute;
+            top: 120px;
+            left: 50px;
+            color: #333;
+            font-size: 24px;
+            line-height: 1.6;
+        }
+        
+        .service-item {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .bullet {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #0064b0;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .contact-bottom {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 50px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        /* Responsiveness */
+        @media (max-width: 1200px) {
+            .card-container {
+                width: 900px;
+                height: 540px;
+            }
+            
+            .main-text {
+                font-size: 56px;
+            }
+        }
+        
+        @media (max-width: 950px) {
+            .card-container {
+                width: 750px;
+                height: 450px;
+            }
+            
+            .header h1 {
+                font-size: 2.5em;
+            }
+            
+            .main-text {
+                font-size: 46px;
+            }
+            
+            .quality-text {
+                font-size: 20px;
+            }
+            
+            .name-text .big {
+                font-size: 32px;
+            }
+            
+            .name-text .small {
+                font-size: 24px;
+            }
+            
+            .tire-image {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .services-list {
+                font-size: 20px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .card-container {
+                width: 500px;
+                height: 300px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .main-text {
+                font-size: 30px;
+            }
+            
+            .quality-text {
+                font-size: 16px;
+            }
+            
+            .name-text .big {
+                font-size: 24px;
+            }
+            
+            .name-text .small {
+                font-size: 18px;
+            }
+            
+            .phone-text {
+                font-size: 16px;
+            }
+            
+            .tire-image {
+                width: 100px;
+                height: 100px;
+                border-width: 10px;
+            }
+            
+            .services-list {
+                font-size: 14px;
+                left: 30px;
+            }
+            
+            .contact-bottom {
+                font-size: 14px;
+                padding: 0 20px;
+            }
+            
+            .blue-top-bar {
+                height: 50px;
+            }
+            
+            .blue-bottom-bar {
+                height: 40px;
+            }
+            
+            .services-title {
+                top: 15px;
+                font-size: 20px;
+            }
+        }
+        
+        @media (max-width: 520px) {
+            .card-container {
+                width: 300px;
+                height: 180px;
+            }
+            
+            .main-text {
+                font-size: 20px;
+            }
+            
+            .quality-text {
+                font-size: 12px;
+            }
+            
+            .name-text .big {
+                font-size: 16px;
+            }
+            
+            .name-text .small {
+                font-size: 14px;
+            }
+            
+            .phone-text {
+                font-size: 12px;
+            }
+            
+            .white-bar {
+                height: 50px;
+            }
+            
+            .tire-image {
+                width: 70px;
+                height: 70px;
+                border-width: 7px;
+            }
+            
+            .services-list {
+                top: 70px;
+                font-size: 10px;
+                left: 20px;
+            }
+            
+            .bullet {
+                width: 5px;
+                height: 5px;
+                margin-right: 8px;
+            }
+            
+            .service-item {
+                margin-bottom: 8px;
+            }
+            
+            .contact-bottom {
+                font-size: 10px;
+                padding: 0 10px;
+            }
+            
+            .card-instructions {
+                font-size: 14px;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>Twoja nowa wizytówka: Serwis Opon Siwierski</h1>
+        </div>
+        
+        <div class="card-container">
+            <div class="card" id="card">
+                <div class="card-side card-front">
+                    <!-- Opcja 1: Użycie kodu HTML wizytówki -->
+                    <div class="front-content" id="front-design">
+                        <div class="yellow-element"></div>
+                        <div class="white-bar"></div>
+                        
+                        <div class="main-text">
+                            NIE MA<br>TRUDNYCH<br>DRÓG!
+                        </div>
+                        
+                        <div class="quality-text">
+                            NAJWYŻSZA<br>JAKOŚĆ
+                        </div>
+                        
+                        <div class="name-text">
+                            <div class="big">SERWIS OPON</div>
+                            <div class="small">SIWIERSKI</div>
+                        </div>
+                        
+                        <div class="phone-text">
+                            ZADZWOŃ: 123 456 789
+                        </div>
+                        
+                        <div class="tire-image"></div>
+                    </div>
+                    
+                    <!-- Opcja 2: Obraz PNG wizytówki - początkowo ukryty -->
+                    <img id="front-image" src="wizytowka-front.png" alt="Przód wizytówki" style="display: none;">
+                </div>
+                <div class="card-side card-back">
+                    <!-- Opcja 1: Użycie kodu HTML dla tyłu wizytówki -->
+                    <div class="back-content" id="back-design">
+                        <div class="blue-top-bar"></div>
+                        <div class="services-title">NASZE USŁUGI</div>
+                        
+                        <div class="services-list">
+                            <div class="service-item">
+                                <div class="bullet"></div>
+                                <div>SERWIS OPON OSOBOWYCH</div>
+                            </div>
+                            <div class="service-item">
+                                <div class="bullet"></div>
+                                <div>SERWIS OPON ROLNICZYCH</div>
+                            </div>
+                            <div class="service-item">
+                                <div class="bullet"></div>
+                                <div>SERWIS OPON OTR</div>
+                            </div>
+                            <div class="service-item">
+                                <div class="bullet"></div>
+                                <div>SERWIS OLEJOWY</div>
+                            </div>
+                            <div class="service-item">
+                                <div class="bullet"></div>
+                                <div>SERWIS UKŁADU HAMULCOWEGO</div>
+                            </div>
+                            <div class="service-item">
+                                <div class="bullet"></div>
+                                <div>SZEROKI WYBÓR OPON NOWYCH</div>
+                            </div>
+                            <div class="service-item">
+                                <div class="bullet"></div>
+                                <div>I UŻYWANYCH</div>
+                            </div>
+                            <div class="service-item">
+                                <div class="bullet"></div>
+                                <div>OBSŁUGA KÓŁ ROLNICZYCH</div>
+                            </div>
+                        </div>
+                        
+                        <div class="blue-bottom-bar"></div>
+                        <div class="contact-bottom">
+                            <div>TEL: 123 456 789</div>
+                            <div>WWW.SIWIERSKIOPONY.PL</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Opcja 2: Obraz PNG tyłu wizytówki - początkowo ukryty -->
+                    <img id="back-image" src="wizytowka-back.png" alt="Tył wizytówki" style="display: none;">
+                </div>
+            </div>
+        </div>
+        
+        <div class="card-instructions">
+            <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24" style="margin-right: 10px;">
+                <path d="M21.83 8l-2.58-2.59L17.66 7l2.83 2.83-2.83 2.83 1.59 1.59L21.83 12l-2.83-2.83L21.83 8zM17 19H7V5h10v4h2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2v-4h-2v4z"/>
+            </svg>
+            Kliknij na wizytówkę, aby zobaczyć drugą stronę
+        </div>
+        
+        <div class="footer">
+            <h2>Dziękujemy za zaufanie!</h2>
+            <p>Zapraszamy do dalszej współpracy.</p>
+        </div>
+    </div>
+
+    <script>
+        // Funkcja do obsługi obrotu wizytówki
+        const card = document.getElementById('card');
+        
+        card.addEventListener('click', () => {
+            card.classList.toggle('flipped');
+        });
+        
+        // Funkcja do tworzenia cząsteczek w tle
+        function createParticles() {
+            const particles = document.getElementById('particles');
+            particles.innerHTML = '';
+            
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                const size = Math.random() * 5 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                const xPos = Math.random() * window.innerWidth;
+                particle.style.left = `${xPos}px`;
+                
+                const delay = Math.random() * 10;
+                const duration = Math.random() * 20 + 10;
+                
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${delay}s`;
+                
+                particles.appendChild(particle);
+            }
+            
+            setTimeout(createParticles, 10000);
+        }
+        
+        // Sprawdź, czy pliki PNG istnieją i użyj ich, jeśli tak
+        window.addEventListener('load', function() {
+            // Sprawdź plik PNG przedniej strony
+            const frontImg = document.getElementById('front-image');
+            const frontDesign = document.getElementById('front-design');
+            
+            // Obsługa obrazu przodu
+            frontImg.onload = function() {
+                // Plik istnieje, więc go wyświetl
+                frontImg.style.display = 'block';
+                frontDesign.style.display = 'none';
+            };
+            
+            frontImg.onerror = function() {
+                // Plik nie istnieje, więc użyj wbudowanego designu
+                frontImg.style.display = 'none';
+                frontDesign.style.display = 'block';
+            };
+            
+            // Sprawdź plik PNG tylnej strony
+            const backImg = document.getElementById('back-image');
+            const backDesign = document.getElementById('back-design');
+            
+            // Obsługa obrazu tyłu
+            backImg.onload = function() {
+                // Plik istnieje, więc go wyświetl
+                backImg.style.display = 'block';
+                backDesign.style.display = 'none';
+            };
+            
+            backImg.onerror = function() {
+                // Plik nie istnieje, więc użyj wbudowanego designu
+                backImg.style.display = 'none';
+                backDesign.style.display = 'block';
+            };
+            
+            // Załaduj ponownie obrazy, aby wywołać obsługę zdarzeń onload/onerror
+            frontImg.src = 'wizytowka-front.png';
+            backImg.src = 'wizytowka-back.png';
+            
+            // Uruchom animację cząsteczek
+            createParticles();
+        });
+    </script>
+</body>
+</html>
